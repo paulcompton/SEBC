@@ -177,3 +177,5 @@ chkconfig ntpd on
 
 Note: Forwarding request to 'systemctl enable ntpd.service'.
 Created symlink from /etc/systemd/system/multi-user.target.wants/ntpd.service to /usr/lib/systemd/system/ntpd.service.
+
+
