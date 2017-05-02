@@ -1,3 +1,11 @@
+ 
++----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-------------------------------------------------------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+
+| Slave_IO_State                   | Master_Host  | Master_User | Master_Port | Connect_Retry | Master_Log_File    | Read_Master_Log_Pos | Relay_Log_File           | Relay_Log_Pos | Relay_Master_Log_File | Slave_IO_Running | Slave_SQL_Running | Replicate_Do_DB                                             | Replicate_Ignore_DB | Replicate_Do_Table | Replicate_Ignore_Table | Replicate_Wild_Do_Table | Replicate_Wild_Ignore_Table | Last_Errno | Last_Error                                                                                                                                                                                                       | Skip_Counter | Exec_Master_Log_Pos | Relay_Log_Space | Until_Condition | Until_Log_File | Until_Log_Pos | Master_SSL_Allowed | Master_SSL_CA_File | Master_SSL_CA_Path | Master_SSL_Cert | Master_SSL_Cipher | Master_SSL_Key | Seconds_Behind_Master | Master_SSL_Verify_Server_Cert | Last_IO_Errno | Last_IO_Error | Last_SQL_Errno | Last_SQL_Error                                                                                                                                                                                                   | Replicate_Ignore_Server_Ids | Master_Server_Id |
++----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-------------------------------------------------------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+
+| Waiting for master to send event | 172.31.5.197 | repuser     |        3306 |            10 | mariadb-bin.000002 |                3789 | mariadb-relay-bin.000004 |           531 | mariadb-bin.000001    | Yes              | No                | ACTIVITYMONITOR,cm,amon,rman,metastore,sentry,nav,navms,hue |                     |                    |                        |                         |                             |       1032 | Could not execute Update_rows event on table cm.CM_VERSION; Can't find record in 'CM_VERSION', Error_code: 1032; handler error HA_ERR_END_OF_FILE; the event's master log mariadb-bin.000001, end_log_pos 171551 |            0 |              171135 |           12340 | None            |                |             0 | No                 |                    |                    |                 |                   |                |                  NULL | No                            |             0 |               |           1032 | Could not execute Update_rows event on table cm.CM_VERSION; Can't find record in 'CM_VERSION', Error_code: 1032; handler error HA_ERR_END_OF_FILE; the event's master log mariadb-bin.000001, end_log_pos 171551 |                             |                1 |
++----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-------------------------------------------------------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+ 
+ 
+
 DATABASE CONFIG
  install mariadb (nodes 1,2)
 sudo yum install mariadb-server
@@ -29,17 +37,11 @@ max_connections = 550
 #expire_logs_days = 10
 #max_binlog_size = 100M
 
-
-#replication settings
-bind-address = 172.31.5.197
-server-id = 1
-binlog_do_db = ACTIVITYMONITOR
-
 #log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
 #and chown the specified folder to the mysql user.
 log_bin=/var/lib/mysql/mysql_binary_log
 
-binlog_format = mixed
+binlog_format =row
 
 read_buffer_size = 2M
 read_rnd_buffer_size = 16M
@@ -54,6 +56,21 @@ innodb_buffer_pool_size = 4G
 innodb_thread_concurrency = 8
 innodb_flush_method = O_DIRECT
 innodb_log_file_size = 512M
+
+# replication settings
+bind-address=172.31.5.197
+server-id=1
+log-bin
+replicate-do-db=ACTIVITYMONITOR
+replicate_do_db=cm
+replicate_do_db=amon
+replicate_do_db=rman
+replicate_do_db=metastore
+replicate_do_db=sentry
+replicate_do_db=nav
+replicate_do_db=navms
+replicate_do_db=hue
+
 
 [mysqld_safe]
 log-error=/var/log/mariadb/mariadb.log
@@ -107,17 +124,31 @@ FLUSH PRIVILEGES;
 USE ACTIVITYMONITOR;
 FLUSH TABLES WITH READ LOCK;
 SHOW MASTER STATUS;
-+-------------------------+----------+-----------------+------------------+
-| File                    | Position | Binlog_Do_DB    | Binlog_Ignore_DB |
-+-------------------------+----------+-----------------+------------------+
-| mysql_binary_log.000004 |      466 | ACTIVITYMONITOR |                  |
-+-------------------------+----------+-----------------+------------------+
++--------------------+----------+--------------+------------------+
+| File               | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++--------------------+----------+--------------+------------------+
+| mariadb-bin.000001 |   164490 |              |                  |
++--------------------+----------+--------------+------------------+
 
 seperate window 
-sudo mysqldump -u root -p --opt ACTIVITYMONITOR > activitymonitor.sql
+create database cm DEFAULT CHARACTER SET utf8;
+create database amon DEFAULT CHARACTER SET utf8;
+create database rman DEFAULT CHARACTER SET utf8;
+create database metastore DEFAULT CHARACTER SET utf8;
+create database sentry DEFAULT CHARACTER SET utf8;
+create database nav DEFAULT CHARACTER SET utf8;
+create database navms DEFAULT CHARACTER SET utf8;
+
+grant all on cm.* TO 'cm'@'%' IDENTIFIED BY 'servian';
+grant all on amon.* TO 'navms'@'%' IDENTIFIED BY 'amon_password';
+grant all on rman.* TO 'rman'@'%' IDENTIFIED BY 'rman_password';
+grant all on metastore.* TO 'hive'@'%' IDENTIFIED BY 'hive_password';
+grant all on sentry.* TO 'sentry'@'%' IDENTIFIED BY 'sentry_password';
+grant all on nav.* TO 'nav'@'%' IDENTIFIED BY 'nav_password';
+grant all on navms.* TO 'navms'@'%' IDENTIFIED BY 'navms_password';
 
 UNLOCK TABLES;
-
+mysql_upgrade -u root -p
 
 
 #SLAVE SERVER
@@ -152,11 +183,18 @@ query_cache_type = 1
 max_connections = 550
 #expire_logs_days = 10
 #max_binlog_size = 100M
+
 # replication settings
 server-id = 2
-relay-log               = /var/log/mysql/mysql-relay-bin.log
-binlog_do_db            = ACTIVITYMONITOR
-
+replicate_do_db=ACTIVITYMONITOR
+replicate_do_db=cm
+replicate_do_db=amon
+replicate_do_db=rman
+replicate_do_db=metastore
+replicate_do_db=sentry
+replicate_do_db=nav
+replicate_do_db=navms
+replicate_do_db=hue
 #log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
 #and chown the specified folder to the mysql user.
 log_bin=/var/lib/mysql/mysql_binary_log
@@ -182,13 +220,31 @@ log-error=/var/log/mariadb/mariadb.log
 pid-file=/var/run/mariadb/mariadb.pid
 ## File end
 
+
  sudo service mariadb restart
  mysql -u root -p
- CHANGE MASTER TO MASTER_HOST='172.31.5.197',MASTER_USER='repuser', MASTER_PASSWORD='servian', MASTER_LOG_FILE='mysql-bin.000001', MASTER_LOG_POS=  466
+
+FLUSH SLAVE;
+
+ CHANGE MASTER TO
+ MASTER_HOST='172.31.5.197',
+ MASTER_USER='repuser',
+ MASTER_PASSWORD='servian',
+ MASTER_PORT=3306,
+ MASTER_LOG_FILE='mariadb-bin.000001',
+ MASTER_LOG_POS=164490,
+ MASTER_CONNECT_RETRY=10;
+
  
  
-# Replica not working yet
- 
+#OUTPUT SLAVE STATUS (Single test database)
+MariaDB [(none)]> show slave status\g;
++----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-----------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+----------------+-----------------------------+------------------+
+| Slave_IO_State                   | Master_Host  | Master_User | Master_Port | Connect_Retry | Master_Log_File    | Read_Master_Log_Pos | Relay_Log_File           | Relay_Log_Pos | Relay_Master_Log_File | Slave_IO_Running | Slave_SQL_Running | Replicate_Do_DB | Replicate_Ignore_DB | Replicate_Do_Table | Replicate_Ignore_Table | Replicate_Wild_Do_Table | Replicate_Wild_Ignore_Table | Last_Errno | Last_Error | Skip_Counter | Exec_Master_Log_Pos | Relay_Log_Space | Until_Condition | Until_Log_File | Until_Log_Pos | Master_SSL_Allowed | Master_SSL_CA_File | Master_SSL_CA_Path | Master_SSL_Cert | Master_SSL_Cipher | Master_SSL_Key | Seconds_Behind_Master | Master_SSL_Verify_Server_Cert | Last_IO_Errno | Last_IO_Error | Last_SQL_Errno | Last_SQL_Error | Replicate_Ignore_Server_Ids | Master_Server_Id |
++----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-----------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+----------------+-----------------------------+------------------+
+| Waiting for master to send event | 172.31.5.197 | repuser     |        3306 |            10 | mariadb-bin.000001 |              155630 | mariadb-relay-bin.000002 |         30385 | mariadb-bin.000001    | Yes              | Yes               | ACTIVITYMONITOR |                     |                    |                        |                         |                             |          0 |            |            0 |              155630 |           30681 | None            |                |             0 | No                 |                    |                    |                 |                   |                |                     0 | No                            |             0 |               |              0 |                |                             |                1 |
++----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-----------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+----------------+-----------------------------+------------------+
+
  
 #CM INSTALL
 #download the repo
