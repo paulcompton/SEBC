@@ -1,4 +1,4 @@
- 
+#Working all databases
 +----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-------------------------------------------------------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+
 | Slave_IO_State                   | Master_Host  | Master_User | Master_Port | Connect_Retry | Master_Log_File    | Read_Master_Log_Pos | Relay_Log_File           | Relay_Log_Pos | Relay_Master_Log_File | Slave_IO_Running | Slave_SQL_Running | Replicate_Do_DB                                             | Replicate_Ignore_DB | Replicate_Do_Table | Replicate_Ignore_Table | Replicate_Wild_Do_Table | Replicate_Wild_Ignore_Table | Last_Errno | Last_Error                                                                                                                                                                                                       | Skip_Counter | Exec_Master_Log_Pos | Relay_Log_Space | Until_Condition | Until_Log_File | Until_Log_Pos | Master_SSL_Allowed | Master_SSL_CA_File | Master_SSL_CA_Path | Master_SSL_Cert | Master_SSL_Cipher | Master_SSL_Key | Seconds_Behind_Master | Master_SSL_Verify_Server_Cert | Last_IO_Errno | Last_IO_Error | Last_SQL_Errno | Last_SQL_Error                                                                                                                                                                                                   | Replicate_Ignore_Server_Ids | Master_Server_Id |
 +----------------------------------+--------------+-------------+-------------+---------------+--------------------+---------------------+--------------------------+---------------+-----------------------+------------------+-------------------+-------------------------------------------------------------+---------------------+--------------------+------------------------+-------------------------+-----------------------------+------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+---------------------+-----------------+-----------------+----------------+---------------+--------------------+--------------------+--------------------+-----------------+-------------------+----------------+-----------------------+-------------------------------+---------------+---------------+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+
@@ -20,9 +20,9 @@ vi /etc/my.cnf
 ##File contents
 [mysqld]
 transaction-isolation = READ-COMMITTED
-# Disabling symbolic-links is recommended to prevent assorted security risks;
-# to do so, uncomment this line:
-# symbolic-links = 0
+ # Disabling symbolic-links is recommended to prevent assorted security risks;
+ # to do so, uncomment this line:
+ # symbolic-links = 0
 
 key_buffer = 16M
 key_buffer_size = 32M
@@ -34,11 +34,11 @@ query_cache_size = 64M
 query_cache_type = 1
 
 max_connections = 550
-#expire_logs_days = 10
-#max_binlog_size = 100M
+ #expire_logs_days = 10
+ #max_binlog_size = 100M
 
-#log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
-#and chown the specified folder to the mysql user.
+ #log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
+ #and chown the specified folder to the mysql user.
 log_bin=/var/lib/mysql/mysql_binary_log
 
 binlog_format =row
@@ -48,7 +48,7 @@ read_rnd_buffer_size = 16M
 sort_buffer_size = 8M
 join_buffer_size = 8M
 
-# InnoDB settings
+ # InnoDB settings
 innodb_file_per_table = 1
 innodb_flush_log_at_trx_commit  = 2
 innodb_log_buffer_size = 64M
@@ -57,7 +57,7 @@ innodb_thread_concurrency = 8
 innodb_flush_method = O_DIRECT
 innodb_log_file_size = 512M
 
-# replication settings
+ # replication settings
 bind-address=172.31.5.197
 server-id=1
 log-bin
@@ -167,9 +167,9 @@ vi /etc/my.cnf
 ##File contents
 [mysqld]
 transaction-isolation = READ-COMMITTED
-# Disabling symbolic-links is recommended to prevent assorted security risks;
-# to do so, uncomment this line:
-# symbolic-links = 0
+ # Disabling symbolic-links is recommended to prevent assorted security risks;
+ # to do so, uncomment this line:
+ # symbolic-links = 0
 
 key_buffer = 16M
 key_buffer_size = 32M
@@ -181,10 +181,10 @@ query_cache_size = 64M
 query_cache_type = 1
 
 max_connections = 550
-#expire_logs_days = 10
-#max_binlog_size = 100M
+ #expire_logs_days = 10
+ #max_binlog_size = 100M
 
-# replication settings
+ # replication settings
 server-id = 2
 replicate_do_db=ACTIVITYMONITOR
 replicate_do_db=cm
@@ -195,8 +195,9 @@ replicate_do_db=sentry
 replicate_do_db=nav
 replicate_do_db=navms
 replicate_do_db=hue
-#log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
-#and chown the specified folder to the mysql user.
+
+ #log_bin should be on a disk with enough free space. Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your system
+ #and chown the specified folder to the mysql user.
 log_bin=/var/lib/mysql/mysql_binary_log
 
 binlog_format = mixed
@@ -206,7 +207,7 @@ read_rnd_buffer_size = 16M
 sort_buffer_size = 8M
 join_buffer_size = 8M
 
-# InnoDB settings
+ # InnoDB settings
 innodb_file_per_table = 1
 innodb_flush_log_at_trx_commit  = 2
 innodb_log_buffer_size = 64M
@@ -221,8 +222,8 @@ pid-file=/var/run/mariadb/mariadb.pid
 ## File end
 
 
- sudo service mariadb restart
- mysql -u root -p
+sudo service mariadb restart
+mysql -u root -p
 
 FLUSH SLAVE;
 
@@ -259,13 +260,8 @@ sudo yum install oracle-j2sdk1.7
 
 sudo yum install cloudera-manager-daemons cloudera-manager-server
  
- sudo service cloudera-scm-server start
- 
- 
- ip-172-31-5-197.ap-southeast-2.compute.internal
- ip-172-31-9-1.ap-southeast-2.compute.internal
- ip-172-31-1-73.ap-southeast-2.compute.internal
- ip-172-31-5-110.ap-southeast-2.compute.internal
+sudo service cloudera-scm-server start
+
  
  
  
