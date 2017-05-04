@@ -68,7 +68,7 @@ esac
 ```
 
 end of file contents
-
+```
 sudo chmod 755 /etc/init.d/disable-transparent-hugepages
 sudo chkconfig --add disable-transparent-hugepages
 

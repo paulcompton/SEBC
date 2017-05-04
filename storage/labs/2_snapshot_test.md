@@ -1,3 +1,4 @@
+```
 #CREATE SNAPSHOT DIR
  
  hadoop fs -mkdir /precious
@@ -22,3 +23,4 @@
  hdfs dfs -ls /precious/.snapshot/sebc-hdfs-test
  
  hdfs dfs -cp -ptopax /precious/.snapshot/sebc-hdfs-test/SEBC.zip /precious
+ ```

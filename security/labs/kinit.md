@@ -1,3 +1,4 @@
+```
 [paulcompton@ip-172-31-5-197 ~]$ kinit                                                                                         
 Password for paulcompton@HADOOP.COM:     
 
@@ -9,3 +10,4 @@ Default principal: paulcompton@HADOOP.COM
 Valid starting       Expires              Service principal
 05/03/2017 08:14:06  05/04/2017 08:14:06  krbtgt/HADOOP.COM@HADOOP.COM
 	renew until 05/10/2017 08:14:06
+	```

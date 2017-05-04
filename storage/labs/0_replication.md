@@ -1,3 +1,4 @@
+```
 # CREATING THE TEST FILE
 su - hdfs
 cd /opt/cloudera/parcels/CDH/jars/
@@ -11,3 +12,4 @@ Need to use webhdfs / httpfs to achieve this:
 Tested webhdfs but that did not work.
 Tried to use HTTPfs for replication but is did not change the error.
 
+```

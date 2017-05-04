@@ -1,3 +1,4 @@
+```
 scp /Users/paulcompton/.ssh/servian-consultancy-syd_201603.pem tools/*.* ec2-user@ec2-54-206-125-242.ap-southeast-2.compute.amazonaws.com:/home/ec2-user/
 
 
@@ -56,3 +57,4 @@ do
 done
 
 echo Testing loop ended on `date`
+```

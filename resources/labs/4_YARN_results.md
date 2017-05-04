@@ -1,4 +1,4 @@
-
+```
 #slowest 
 Testing loop started on Tue May 2 22:36:29 EDT 2017
 i = 16 j = 16 k = 512
@@ -59,3 +59,4 @@ Deleted hdfs://ip-172-31-5-110.ap-southeast-2.compute.internal/results/tg-10GB-8
 Warning: fs.defaultFS is not set when running "rm" command.
 rm: `hdfs://ip-172-31-5-110.ap-southeast-2.compute.internal/results/ts-10GB-8-2-1024': No such file or directory
 Testing loop ended on Tue May 2 23:50:58 EDT 2017
+```

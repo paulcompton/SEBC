@@ -1,3 +1,4 @@
+```
 #SENTRY CONFIGURATION
 ##sentry-site.xml
 ```
@@ -230,3 +231,4 @@ INFO  : OK
 | test1     |
 +-----------+--+
 1 row selected (0.323 seconds)
+```

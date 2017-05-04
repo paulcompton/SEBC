@@ -1,4 +1,4 @@
-
+```
 # STOP HIVE
 }[root@ip-172-31-5-197 ~]#curl -X POST  -u paulcompton:cloudera 'http://ec2-54-206-125-242.ap-southeast-2.compute.amazonaws.com:7180/api/v12/clusters/paulcompton/services/hive/commands/stop'
 {
@@ -106,3 +106,6 @@
   "maintenanceOwners" : [ ],
   "displayName" : "Hive",
   "entityStatus" : "GOOD_HEALTH"
+  
+  
+  ```

@@ -1,5 +1,5 @@
 
-
+```
 #PERFORMANCE TEST
 
 useradd paulcompton
@@ -26,3 +26,5 @@ sys	0m0.418s
 
 
 hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/hadoop-examples.jar teragen -Dmapreduce.job.maps=8 -Dmapreduce.map.memory.mb=1 -Dmapreduce.map.java.opts.max.heap= 410 51200000 /results/tg-10GB-8-1-512 1>tera_8_1_512.out 2>tera_8_1_512.err 
+
+```

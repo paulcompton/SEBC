@@ -1,3 +1,4 @@
+```
 4_API_upgrade_calls.md
 
  curl -X  GET  -u paulcompton:cloudera 'http://ec2-54-206-125-242.ap-southeast-2.compute.amazonaws.co:7180/api/version'
@@ -36,3 +37,4 @@ curl -X  GET  -u paulcompton:cloudera 'http://ec2-54-206-125-242.ap-southeast-2.
   "scmDbType" : "MYSQL",
   "embeddedDbUsed" : false
 }
+```
