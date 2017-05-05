@@ -1,8 +1,8 @@
 
 ```
 #PERFORMANCE TEST
-
-useradd paulcompton
+groupadd ????
+useradd paulcompton -u 1000
 passwd paulcompton
 
 #SETUP USER DIRECTORY
