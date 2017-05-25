@@ -13,12 +13,14 @@ default_realm
 Zookeeper
 Yarn 
 HDFS
+```
 `A better answer: All of them`
-
+```
 #How do you upgrade the CM agents?
 Using the cloudera upgrade wizard
+```
 `C'mon now, this is my game and you have to play. This is lazy and beneath you.`
-
+```
 #Give the tsquery statement used to chart Hue's CPU utilization?
 select cpu_percent where serviceName= hue
 
