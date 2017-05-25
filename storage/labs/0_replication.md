@@ -13,3 +13,4 @@ Tested webhdfs but that did not work.
 Tried to use HTTPfs for replication but is did not change the error.
 
 ```
+mfernest: As mentioned in class, the summary above defeats the purpose of showing what you tried and what results you got. If you don't have a proper journal of how things didn't work, you're left with learning that whatever you tried didn't work.
