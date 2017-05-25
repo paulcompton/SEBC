@@ -1,5 +1,9 @@
 ```
 [cate@ip-172-31-10-6 jars]$ time hadoop jar hadoop-examples.jar teragen -D dfs.block.size=16777216 -D mapred.reduce.tasks=4 -D mapreduce.map.memory.mb=512 65536000 /user/cate/tgen
+```
+This is a curious error. The requirement called for eight files of output. Rather than set the number of mappers to eight, you set the number of reducers to four. What did you have in mind here?
+
+```
 17/05/04 21:44:50 INFO client.RMProxy: Connecting to ResourceManager at manager.paulcompton/172.31.1.226:8032
 17/05/04 21:44:51 INFO terasort.TeraGen: Generating 65536000 using 2
 17/05/04 21:44:51 INFO mapreduce.JobSubmitter: number of splits:2
@@ -81,3 +85,4 @@ Found 3 items
 -rw-r--r--   3 cate supergroup 3276800000 2017-05-04 21:46 /user/cate/tgen/part-m-00000
 -rw-r--r--   3 cate supergroup 3276800000 2017-05-04 21:46 /user/cate/tgen/part-m-00001
 ```
+Given the notice above, you should have listed `part-m-00000` to `part-m-00007` as a result.
